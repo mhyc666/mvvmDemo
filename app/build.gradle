@@ -1,0 +1,59 @@
+apply plugin: 'com.android.application'
+apply plugin: 'me.tatarka.retrolambda'  //java8 lambda表达式
+
+android {
+    compileSdkVersion rootProject.ext.androidCompileSdkVersion
+    buildToolsVersion rootProject.ext.androidBuildToolsVersion
+
+    defaultConfig {
+        applicationId "com.wdh.mvvmdemo"
+        minSdkVersion rootProject.ext.androidMinSdkVersion
+        targetSdkVersion rootProject.ext.androidTargetSdkVersion
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    dataBinding {
+        enabled = true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    packagingOptions {  //解决第三方库重新打包META-INF的问题
+        exclude 'META-INF/rxjava.properties'
+    }
+
+    repositories {
+        mavenCentral()
+        maven { url 'https://maven.google.com' }
+    }
+}
+
+dependencies {
+    Map<String, String> dependencies = rootProject.ext.dependencies
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile dependencies.appCompat
+    compile dependencies.support
+    compile dependencies.design
+    compile dependencies.cardView
+    compile dependencies.recyclerView
+    compile dependencies.retrofit
+    compile dependencies.logging
+    compile dependencies.retrofitConverterGson
+    compile dependencies.retrofitAdapterRxJava
+    compile dependencies.glide
+    compile dependencies.rxAndroid
+    compile dependencies.rxlifecycle
+    testCompile dependencies.jUnit
+}
